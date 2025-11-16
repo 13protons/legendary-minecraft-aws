@@ -22,7 +22,15 @@ cp .env.example .env
 # Edit .env and set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, etc.
 ```
 
-### 2. Deploy with Terraform
+### 2. Export Environment Variables
+
+Before running Terraform, export your environment variables from `.env`:
+
+```bash
+source ./export-env.sh
+```
+
+### 3. Deploy with Terraform
 
 Run the provided deployment script:
 

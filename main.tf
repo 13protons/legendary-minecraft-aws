@@ -48,10 +48,10 @@ resource "aws_security_group" "minecraft_sg" {
 }
 
 resource "aws_instance" "minecraft" {
-  ami             = "ami-0e1d6b6c5c9b2b5c6" # Ubuntu 22.04 ARM64 in us-east-2
-  instance_type   = "t4g.medium"
-  key_name        = aws_key_pair.minecraft_key.key_name
-  security_groups = [aws_security_group.minecraft_sg.name]
+  ami             = var.aws_ami_id # Loaded from environment variable or terraform.tfvars
+  instance_type   = var.aws_instance_type
+  key_name        = var.aws_key_pair_name
+  security_groups = [var.aws_security_group_name]
 
   user_data = file("${path.module}/user-data.sh")
 
