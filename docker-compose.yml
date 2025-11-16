@@ -1,14 +1,16 @@
 services:
-  papermc-on-bedrock:
-    image: octoturnip/papermc-on-bedrock
+  minecraft-server:
+    image: itzg/minecraft-server
     ports:
       - "25565:25565" # Java Edition
-      - "19132:19132/udp" # Bedrock Edition
+      - "19132:19132/udp" # Bedrock Edition (via GeyserMC)
     volumes:
       - ./data:/data
     environment:
       EULA: "TRUE"
+      TYPE: "PAPER"
       VERSION: "1.21.10"
+      MEMORY: "3G"
     restart: unless-stopped
     platform: linux/arm64
 volumes:

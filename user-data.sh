@@ -14,7 +14,6 @@ systemctl start docker
 # Add ubuntu to docker group
 usermod -aG docker ubuntu
 
-
 # Prepare plugins and server files as root
 cd /home/ubuntu
 if [ ! -d legendary-minecraft-aws ]; then
@@ -25,10 +24,6 @@ mkdir -p data/plugins
 curl -L -o data/plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
 curl -L -o data/plugins/Floodgate-Spigot.jar https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
 curl -L -o data/plugins/Viaversion.jar https://api.spiget.org/v2/resources/19254/download
-
-# Remove old PaperMC jars to force download of the latest
-rm -f data/paper*.jar
-
 
 # Start the server as root (cloud-init context)
 docker-compose up -d
