@@ -10,7 +10,7 @@ services:
       EULA: "TRUE"
       TYPE: "PAPER"
       VERSION: "1.21.10"
-      MEMORY: "3G"
+      MEMORY: "8G"
     restart: unless-stopped
     platform: linux/arm64
 volumes:
