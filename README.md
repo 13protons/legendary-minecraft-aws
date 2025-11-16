@@ -5,25 +5,65 @@ This repository provides a ready-to-run Minecraft server using the Legendary Gey
 ## Prerequisites
 
 - You need **an AWS account**.
+- Your AWS credentials and region set in `.env`.
+
+> **Note:** You do NOT need to manually create an EC2 instance or security group—Terraform will provision everything for you.
+
+## Quick Start: Automated AWS Deployment
+
+This repository now supports automated deployment to AWS using Terraform and a deployment script.
+
+### 1. Configure AWS Credentials
+
+Copy `.env.example` to `.env` and fill in your AWS credentials and settings:
+
+```bash
+cp .env.example .env
+# Edit .env and set AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, etc.
+```
+
+### 2. Deploy with Terraform
+
+Run the provided deployment script:
+
+```bash
+./deploy.sh
+```
+
+This will provision an EC2 instance, configure security groups, and start the Minecraft server automatically.
+
+### 3. Connect to Your Server
+
+- Java Edition: Use `<EC2 Public IP>:25565`
+- Bedrock Edition: Use `<EC2 Public IP>:19132`
+
+### 4. Customization
+
+- Edit `docker-compose.yml` to adjust memory, timezone, or Minecraft version.
+- Update `user-data.sh` for advanced bootstrapping.
+
+### 5. Manual Steps (if needed)
+
+If you prefer manual setup, see the legacy instructions below.
+
+# Legendary Minecraft Server on AWS EC2 (t4g.medium)
+
+This repository provides a ready-to-run Minecraft server using the Legendary Geyser + Floodgate container. Deploy seamlessly on an AWS EC2 t4g.medium (ARM) instance for both Java and Bedrock players!
+
+## Prerequisites
+
+- You need **an AWS account**.
 - EC2 t4g.medium instance (ARM64, 4 vCPU / 4 GB RAM recommended).
 - **Ubuntu 20.04+** or **Debian** preferred.
 - **Ports 25565 (TCP) and 19132 (UDP)** open in your security group.
 
-## Step-by-Step Deployment
+## Manual Deployment (Advanced/Legacy)
 
-### 1. Launch EC2 Instance
+If you want to set up the server manually (without Terraform), follow these steps:
 
-- Go to AWS Console > EC2 > Launch Instance.
-- Pick **Ubuntu 20.04/22.04 (arm64)**.
-- Select **t4g.medium** as instance type.
-- Configure security group:
-  - **Inbound:**
-    - TCP 25565 (Minecraft Java)
-    - UDP 19132 (Minecraft Bedrock)
-    - Optionally, SSH (TCP 22) for admin access.
-- Launch and SSH to your server.
-
-### 2. Install Docker & Docker Compose
+1. Launch an EC2 instance (t4g.medium, Ubuntu 20.04/22.04 ARM64).
+2. Open ports 25565 (TCP) and 19132 (UDP) in your security group.
+3. SSH into your instance and install Docker & Docker Compose:
 
 ```bash
 sudo apt update
@@ -34,34 +74,22 @@ sudo usermod -aG docker $USER
 # Log out and log in again to apply docker group changes.
 ```
 
-### 3. Download Repository Files
-
-Clone this repo:
+4. Clone this repo and start the server:
 
 ```bash
 git clone https://github.com/13protons/legendary-minecraft-aws.git
 cd legendary-minecraft-aws
-```
-
-### 4. Start the Minecraft Server
-
-```bash
 docker compose up -d
 ```
 
-### 5. Stop/Restart the Server
+5. Stop/Restart the server:
 
 ```bash
 docker compose down   # Stop server
 docker compose up -d  # Restart server
 ```
 
-### 6. (Optional) Customize Settings
-
-- Edit `docker-compose.yml`:
-  - Change `MaxMemory` if using larger EC2 instance.
-  - Set timezone in `TZ`.
-  - To specify a Minecraft version, add `- Version=1.XX.X` under `environment`.
+6. (Optional) Customize settings in `docker-compose.yml`.
 
 ## Data Persistence
 
@@ -69,16 +97,6 @@ World data is stored in the `minecraft_data` docker volume, preserved even if yo
 
 ## Connect
 
-- Java Edition: Use `<EC2 Public IP>:25565`
-- Bedrock Edition: Use `<EC2 Public IP>:19132`
-
 ## Troubleshooting
 
-- Check logs with: `docker compose logs -f`
-- Ensure your security group rules are correct.
-- For ARM instance, platform is set to `linux/arm64` for compatibility.
-
 ## Resources
-
-- [Legendary Minecraft Docker Image](https://hub.docker.com/r/05jchambers/legendary-minecraft-geyser-floodgate)
-- [Project Source](https://github.com/TheRemote/Legendary-Java-Minecraft-Geyser-Floodgate)

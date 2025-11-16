@@ -1,0 +1,18 @@
+.DS_Store
+.env
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Docker volumes/data
+minecraft_data/
+
+# Logs
+*.log
+
+# Editor/system files
+*.swp
+.vscode/
