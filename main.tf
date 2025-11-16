@@ -1,3 +1,7 @@
+output "minecraft_server_public_ip" {
+  description = "The public IP address of the Minecraft EC2 instance."
+  value       = aws_instance.minecraft.public_ip
+}
 provider "aws" {
   region = "us-east-2"
 }

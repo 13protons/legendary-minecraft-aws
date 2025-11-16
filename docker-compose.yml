@@ -1,19 +1,16 @@
-version: "3.8"
-
 services:
-  legendary-minecraft:
-    image: "05jchambers/legendary-minecraft-geyser-floodgate:latest"
-    platform: linux/arm64 # Ensures ARM64 compatibility for t4g EC2
-    restart: unless-stopped
-    volumes:
-      - "minecraft_data:/minecraft"
-    environment:
-      - MaxMemory=3072
-      - TZ=UTC
+  papermc-on-bedrock:
+    image: octoturnip/papermc-on-bedrock
     ports:
       - "25565:25565" # Java Edition
       - "19132:19132/udp" # Bedrock Edition
-      - "19132:19132"
+    volumes:
+      - ./data:/data
+    environment:
+      EULA: "TRUE"
+      VERSION: "1.21.10"
+    restart: unless-stopped
+    platform: linux/arm64
 volumes:
-  minecraft_data:
+  data:
     external: false

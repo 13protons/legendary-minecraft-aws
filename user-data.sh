@@ -1,13 +1,37 @@
 #!/bin/bash
 set -e
 
-sudo apt update
-sudo apt install -y docker.io docker-compose git
-sudo systemctl enable docker
-sudo systemctl start docker
-sudo usermod -aG docker ubuntu
 
+# Install Docker, Docker Compose, and git
+sudo apt-get update
+sudo apt-get install -y docker.io git curl
+sudo apt-get install -y docker-compose
+
+# Enable and start Docker
+systemctl enable docker
+systemctl start docker
+
+# Add ubuntu to docker group
+usermod -aG docker ubuntu
+
+
+# Prepare plugins and server files as root
 cd /home/ubuntu
-git clone https://github.com/13protons/legendary-minecraft-aws.git
+if [ ! -d legendary-minecraft-aws ]; then
+  git clone https://github.com/13protons/legendary-minecraft-aws.git
+fi
 cd legendary-minecraft-aws
-docker compose up -d
+mkdir -p data/plugins
+curl -L -o data/plugins/Geyser-Spigot.jar https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
+curl -L -o data/plugins/Floodgate-Spigot.jar https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+curl -L -o data/plugins/Viaversion.jar https://api.spiget.org/v2/resources/19254/download
+
+# Remove old PaperMC jars to force download of the latest
+rm -f data/paper*.jar
+
+
+# Start the server as root (cloud-init context)
+docker-compose up -d
+
+# Print status
+docker ps -a
